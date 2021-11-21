@@ -55,6 +55,7 @@ UART_HandleTypeDef huart3;
 osThreadId defaultTaskHandle;
 osThreadId tcpClientTaskHandle;
 osThreadId tcpServerTaskHandle;
+osThreadId udpServerTaskHandle;
 /* USER CODE BEGIN PV */
 //DHT_sensor dht11 = {DHT11_IO_GPIO_Port, DHT11_IO_Pin, DHT11, 0};
 /* USER CODE END PV */
@@ -66,6 +67,7 @@ static void MX_USART3_UART_Init(void);
 void StartDefaultTask(void const * argument);
 extern void StartTcpClientTask(void const * argument);
 extern void StartTcpServerTask(void const * argument);
+extern void StartUdpServerTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -333,6 +335,10 @@ int main(void)
   osThreadDef(tcpServerTask, StartTcpServerTask, osPriorityNormal, 0, 2048);
   tcpServerTaskHandle = osThreadCreate(osThread(tcpServerTask), NULL);
 
+  /* definition and creation of udpServerTask */
+  osThreadDef(udpServerTask, StartUdpServerTask, osPriorityIdle, 0, 2048);
+  udpServerTaskHandle = osThreadCreate(osThread(udpServerTask), NULL);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -562,7 +568,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : Audio_SCL_Pin Audio_SDA_Pin */
   GPIO_InitStruct.Pin = Audio_SCL_Pin|Audio_SDA_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -635,13 +641,13 @@ void StartDefaultTask(void const * argument)
 		  lcd_puts(msg);
 	  }
 
-	  BSP_LED_Toggle(BLUE);
+//	  BSP_LED_Toggle(BLUE);
 	  osDelay(1000);
   }
   /* USER CODE END 5 */
 }
 
- /**
+/**
   * @brief  Period elapsed callback in non blocking mode
   * @note   This function is called  when TIM1 interrupt took place, inside
   * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment

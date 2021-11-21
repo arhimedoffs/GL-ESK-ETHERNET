@@ -119,8 +119,8 @@
 #define DNS_DEBUG LWIP_DBG_ON
 /*-----------------------------------------------------------------------------*/
 /* USER CODE BEGIN 1 */
-#define LWIP_DEBUG LWIP_DBG_ON
-#define DHCP_DEBUG LWIP_DBG_ON
+//#define LWIP_DEBUG LWIP_DBG_ON
+//#define DHCP_DEBUG LWIP_DBG_ON
 /* USER CODE END 1 */
 
 #ifdef __cplusplus
